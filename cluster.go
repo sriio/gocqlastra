@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 
 	"github.com/gocql/gocql"
 )
@@ -53,8 +53,9 @@ func (c *clusterConfig) setSSLOptions(entries map[string][]byte) error {
 }
 
 type bundleConfig struct {
-	Host    *string `json:"host"`
-	CQLPort *int64  `json:"cql_port"`
+	Host     *string `json:"host"`
+	CQLPort  *int64  `json:"cql_port"`
+	Keyspace *string `json:"keyspace"`
 }
 
 func parseZipFile(cluster *clusterConfig) error {
@@ -73,7 +74,7 @@ func parseZipFile(cluster *clusterConfig) error {
 			continue
 		}
 
-		buf, err := ioutil.ReadAll(rc)
+		buf, err := io.ReadAll(rc)
 		if err != nil {
 			continue
 		}
@@ -95,5 +96,6 @@ func parseZipFile(cluster *clusterConfig) error {
 	}
 
 	cluster.config.Hosts = []string{fmt.Sprintf("%s:%d", *bundleCfg.Host, *bundleCfg.CQLPort)}
+	cluster.config.Keyspace = *bundleCfg.Keyspace
 	return cluster.setSSLOptions(zipEntries)
 }
