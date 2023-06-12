@@ -3,6 +3,11 @@
 This is a wrapped of gocql to use with DataStax Astra. For more information, please go to see [gocql](https://github.com/gocql/gocql) document.
 
 ## Usage
+
+```bash
+    go get github.com/sriio/gocqlastra@latest
+```
+
 ```go
     cluster, _ := gocqlastra.NewCluster("<<PATH/TO/>>secure-connect.zip")
     cluster.Authenticator = &gocql.PasswordAuthenticator{
